@@ -32,7 +32,7 @@ RSpec.describe User, type: :model do
         @user.password = '12345'
         @user.password_confirmation = '12345'
         @user.valid?
-        expect(@user.errors.full_messages).to include('Password is too short (minimum is 6 characters)')
+        expect(@user.errors.full_messages).to include("Password is too short (minimum is 6 characters)")
       end
       it 'passwordとpassword_confirmationが不一致では登録できない' do
         @user.password = '123456'
@@ -75,6 +75,38 @@ RSpec.describe User, type: :model do
         @user.birthday = ''
         @user.valid?
         expect(@user.errors.full_messages).to include("Birthday can't be blank")
+      end
+      it 'passwordが数字のみでは登録できない' do
+        @user.password = '123456'
+        @user.password_confirmation = '123456'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password is invalid. Include both letters and numbers.')
+      end
+      it 'passwordが英語のみでは登録できない' do
+        @user.password = 'abcdef'
+        @user.password_confirmation = 'abcdef'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password is invalid. Include both letters and numbers.')
+      end
+      it 'last_nameが全角でなければ登録できない' do
+        @user.last_name = 'abcd'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Last name is invalid. Input full-width characters.')
+      end
+      it 'first_nameが全角でなければ登録できない' do
+        @user.first_name = 'abcd'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('First name is invalid. Input full-width characters.')
+      end
+      it 'last_name_kanaがカタカナ全角でなければ登録できない' do
+        @user.last_name_kana = 'abcd'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Last name kana is invalid. Input full-width katakana characters.')
+      end
+      it 'first_name_kanaがカタカナ全角でなければ登録できない' do
+        @user.first_name_kana = 'abcd'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('First name kana is invalid. Input full-width katakana characters.')
       end
     end
   end
