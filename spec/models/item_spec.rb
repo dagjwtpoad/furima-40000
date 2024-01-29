@@ -18,6 +18,11 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include('User must exist')
       end
+      it 'imageが空では登録できない' do
+        @item.image = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Image can't be blank")
+      end
       it 'titleが空では登録できない' do
         @item.title = ''
         @item.valid?
@@ -47,6 +52,11 @@ RSpec.describe Item, type: :model do
         @item.shopping_date_id = 1
         @item.valid?
         expect(@item.errors.full_messages).to include("Shopping date must be other than 1")
+      end
+      it 'prefecture_idが"--"では登録できない' do
+        @item.prefecture_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Prefecture must be other than 1")
       end
       it 'priceが空では登録できない' do
         @item.price = ''
